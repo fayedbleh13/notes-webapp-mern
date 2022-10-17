@@ -4,49 +4,53 @@ import Note from './Note'
 
 const NotesList = () => {
    
-   const {
-      data: notes,
-      isLoading,
-      isSuccess,
-      isError,
-      error
-  } = useGetNotesQuery()
-   
-   let content 
+    const {
+        data: notes,
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetNotesQuery(undefined, {
+    pollingInterval: 15000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true
+    })
 
-   if (isLoading) content = <p>Loading...</p>
+    let content 
 
-   if (isError) {
-      content = <p className="errmsg">{error?.data?.message}</p>
-   }
-   
-   if (isSuccess) {
-      const { ids } = notes
+    if (isLoading) content = <p>Loading...</p>
 
-      const tableContent = ids?.length
-         ? ids.map(noteId => <Note key={noteId} noteId={noteId} />)
-         : null
-      
-      content = (
-         <table className="table table--notes">
+    if (isError) {
+        content = <p className="errmsg">{error?.data?.message}</p>
+    }
+
+    if (isSuccess) {
+        const { ids } = notes
+
+        const tableContent = ids?.length
+            ? ids.map(noteId => <Note key={noteId} noteId={noteId} />)
+            : null
+        
+        content = (
+            <table className="table table--notes">
             <thead className="table__thead">
-               <tr>
-                  <th scope="col" className="table__th user__status">Username</th>
-                  <th scope="col" className="table__th user__created">Created</th>
-                  <th scope="col" className="table__th user__updated">Updated</th>
-                  <th scope="col" className="table__th user__title">Title</th>
-                  <th scope="col" className="table__th user__username">Owner</th>
-                  <th scope="col" className="table__th user__edit">Edit</th>
-               </tr>
+                <tr>
+                    <th scope="col" className="table__th user__status">Username</th>
+                    <th scope="col" className="table__th user__created">Created</th>
+                    <th scope="col" className="table__th user__updated">Updated</th>
+                    <th scope="col" className="table__th user__title">Title</th>
+                    <th scope="col" className="table__th user__username">Owner</th>
+                    <th scope="col" className="table__th user__edit">Edit</th>
+                </tr>
             </thead>
             <tbody>
-               {tableContent}
+                {tableContent}
             </tbody>
-         </table>
-      )
-   }
+            </table>
+        )
+    }
 
-   return content
+    return content
 }
 
 export default NotesList
