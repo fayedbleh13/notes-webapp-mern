@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave } from '@fortawesome/free-solid-svg-icons'
 import { ROLES } from '../../config/roles'
 
-const USER_REGEX = /^[A-z]{3, 20}$/
+const USER_REGEX = /^[A-z]{3,20}$/
 const PWD_REGEX = /^[A-z0-9!@#$%]{8,12}$/
 
 const NewUserForm = () => {
@@ -54,7 +54,7 @@ const NewUserForm = () => {
       setRoles(values)
    }
 
-   const canSave = [roles.length,validUsername, validPassword].every(Boolean) && !isLoading
+   const canSave = [roles.length, validUsername, validPassword].every(Boolean) && !isLoading
 
    const onSaveUserClicked = async (e) => {
       e.preventDefault()
@@ -88,7 +88,7 @@ const NewUserForm = () => {
                   <button
                      className="icon-button"
                      title="Save"
-                     disable={!canSave}
+                     disabled={!canSave}
                   >
                      <FontAwesomeIcon icon={faSave} />
                   </button>

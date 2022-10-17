@@ -8,7 +8,7 @@ import { ROLES } from '../../config/roles'
 const USER_REGEX = /^[A-z]{3,20}$/
 const PWD_REGEX = /^[A-z0-9!@$%]{8-12}$/
 
-const EditUserForm = () => {
+const EditUserForm = ({ user }) => {
     
     const [updateUser, {
         isLoading,
@@ -118,7 +118,7 @@ const EditUserForm = () => {
                             className="icon-button"
                             title="Save"
                             onClick={onSaveUserClicked}
-                            disable={!canSave}
+                            disabled={!canSave}
                         >
                             <FontAwesomeIcon icon={faSave} />
                         </button>
@@ -126,7 +126,6 @@ const EditUserForm = () => {
                             className="icon-button"
                             title="Save"
                             onClick={onDeleteUserClicked}
-                            disable={!canSave}
                         >
                             <FontAwesomeIcon icon={faTrashCan} />
                         </button>
@@ -160,17 +159,15 @@ const EditUserForm = () => {
                     
                     <label className="form__label form__checkbox-container" htmlFor="user-active">
                         Active:
+                        <input 
+                            className={`form__select ${validRolesClass}`}
+                            name="user-active" 
+                            id="user-active"
+                            type="checkbox"
+                            checked={active}
+                            onChange={onActiveChanged}
+                        />
                     </label>
-                    <input 
-                        className={`form__select ${validRolesClass}`}
-                        name="user-active" 
-                        id="user-active"
-                        type="checkbox"
-                        checked={active}
-                        onChange={onActiveChanged}
-                    >
-                    </input>
-
                     <label className="form__label" htmlFor="roles">
                         Assigned Roles:
                     </label>
