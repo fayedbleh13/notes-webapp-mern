@@ -14,35 +14,49 @@ import NewNote from './features/notes/NewNote'
 import NewUserForm from './features/users/NewUserForm'
 import Prefetch from './features/auth/Prefetch'
 import PersistLogin from './features/auth/PersistLogin'
+import RequireAuth from './features/auth/RequireAuth'
+import { ROLES } from './config/roles'
+import useTitle from './hooks/useTitle'
 
 function App() {
-  return (
-    <div>
-      <Routes>
-         <Route path="/" element={<Layout />}>
-            <Route index element={<Public />} />
-            <Route path="login" element={<Login />} />
-            <Route element={<PersistLogin />}>
-                <Route element={<Prefetch />}>
-                    <Route path="dash" element={<DashLayout />}>
-                        <Route index element={<Welcome />} />
-                        <Route path="notes">
-                            <Route index element={<NotesList />} />
-                            <Route path=":id" element={<EditNote />} />
-                            <Route path="new" element={<NewNote />} />
+
+    useTitle('Notes Api')
+
+    return (
+        <div>
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                {/* Public routes */}
+                <Route index element={<Public />} />
+                <Route path="login" element={<Login />} />
+
+                {/* Protected routes */}
+                <Route element={<PersistLogin />}>
+                    <Route element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}>
+                        <Route element={<Prefetch />}>
+                            <Route path="dash" element={<DashLayout />}>
+                                <Route index element={<Welcome />} />
+                                <Route path="notes">
+                                    <Route index element={<NotesList />} />
+                                    <Route path=":id" element={<EditNote />} />
+                                    <Route path="new" element={<NewNote />} />
+                                </Route>
+                                <Route element={<RequireAuth allowedRoles={[ROLES.Manager, ROLES.Admin]} />}>
+                                    <Route path="users">
+                                        <Route index element={<UsersList />} />
+                                        <Route path=":id" element={<EditUser />} />
+                                        <Route path="new" element={<NewUserForm />} />
+                                    </Route>
+                                </Route>
+                            </Route> {/* end dash */}
                         </Route>
-                        <Route path="users">
-                            <Route index element={<UsersList />} />
-                            <Route path=":id" element={<EditUser />} />
-                            <Route path="new" element={<NewUserForm />} />
-                        </Route>
-                    </Route> {/* end dash */}
+                    </Route> 
+                </Route> {/* End protected routes */}
+
                 </Route>
-            </Route>
-         </Route>
-      </Routes>
-    </div>
-  )
+            </Routes>
+        </div>
+    )
 }
 
 export default App
